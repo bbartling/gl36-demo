@@ -1,5 +1,5 @@
 /dist
 *.js.map
 node_modules
-nf.config.json
+# nf.config.json
 .DS_Store
