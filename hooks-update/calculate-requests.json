@@ -1,0 +1,21 @@
+{
+  "hook": {
+    "id": "d5e8215c-d257-11ed-afa1-0242ac120002",
+    "points": {
+      "groupVariables": [
+        {
+          "label": "SUMCLREQ",
+          "attrs": { "equipRef": "{{points.0.attrs.ahuRef}}" }
+        }
+      ],
+      "layer": "automation",
+      "groups": ["ahuRef"],
+      "query": {
+        "field": {
+          "property": "label",
+          "text": "CLREQ"
+        }
+      }
+    }
+  }
+}

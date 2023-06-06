@@ -1,0 +1,51 @@
+{
+  "invoke": { "onChange": false, "args": {} },
+  "prepare": {
+    "hook": {
+      "onUpdate": false,
+      "id": "d5e8215c-d257-11ed-afa1-0242ac120002",
+      "points": {
+        "groups": ["device_id"],
+        "labelAttribute": "attrs.class",
+        "layer": "default",
+        "annotations": [
+          {
+            "fieldName": "airRef",
+            "layer": "model",
+            "path": [
+              {
+                "sourceProperty": "equipRef",
+                "targetProperty": "id",
+                "valueProperty": "airRef"
+              }
+            ]
+          }
+        ],
+        "query": {
+          "field": {
+            "property": "device_id",
+            "numeric": { "minValue": 260002, "maxValue": 260004 }
+          }
+        },
+        "globalVariables": [{ "label": "globaltest1" }],
+        "groupVariables": [
+          {
+            "label": "HTREQ",
+            "attrs": {
+              "description": "Heating Requests test",
+              "ahuRef": "{{points.0.attrs.airRef}}"
+            }
+          },
+          {
+            "label": "CLREQ",
+            "attrs": {
+              "description": "Cooling Requests test",
+              "testAttr": "josh",
+              "ahuRef": "{{points.0.attrs.airRef}}"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

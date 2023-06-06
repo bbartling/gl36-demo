@@ -1,0 +1,17 @@
+{
+  "invoke": { "onChange": false, "args": {} },
+  "prepare": {
+    "hook": {
+      "id": "d5e8215c-d257-11ed-afa1-0242ac120002",
+      "points": {
+        "layer": "automation",
+        "query": {
+          "field": {
+            "property": "label",
+            "text": "SUMCLREQ"
+          }
+        }
+      }
+    }
+  }
+}

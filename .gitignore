@@ -1,0 +1,5 @@
+/dist
+*.js.map
+node_modules
+nf.config.json
+.DS_Store
