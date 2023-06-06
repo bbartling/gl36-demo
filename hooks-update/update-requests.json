@@ -2,7 +2,6 @@
   "hook": {
     "id": "update-requests",
     "entryPoint": "hooks/update-requests.js",
-    "onUpdate": false,
     "points": {
       "groups": ["device_id"],
       "labelAttribute": "attrs.class",
