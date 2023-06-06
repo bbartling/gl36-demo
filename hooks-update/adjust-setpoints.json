@@ -1,6 +1,7 @@
 {
   "hook": {
-    "id": "d5e8215c-d257-11ed-afa1-0242ac120002",
+    "id": "adjust-setpoints",
+    "entryPoint": "hooks/adjust-setpoints.js",
     "points": {
       "layer": "automation",
       "query": {
