@@ -4,10 +4,7 @@
     "name": "static-pressure-reset-requests-5.6.8.2",
     "entryPoint": "hooks/static-pressure-reset-requests-5.6.8.2.js",
     "points": {
-      "grouping": {
-        "oneofKind": "groups",
-        "groups": { "keys": ["equipRef"] }
-      },
+      "groups": { "keys": ["equipRef"] },
       "labelAttribute": "attrs.class",
       "layer": "default",
       "annotations": [
