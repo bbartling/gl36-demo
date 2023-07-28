@@ -44,6 +44,12 @@
       },
       "groupVariables": [
         {
+          "label": "inDamperLoop",
+          "attrs": {
+            "description": "Damper Loop Status"
+          }
+        },
+        {
           "label": "CLSPREQ",
           "attrs": {
             "description": "Cooling SP Requests",
