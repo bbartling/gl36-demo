@@ -18,12 +18,17 @@ module.exports = async ({ points, sdk }) => {
   const MeasuredAirflow = points.byLabel("discharge-air-flow-sensor").first(); // VAV Airflow
   const DamperPosition = points.byLabel("damper-sensor").first(); // Damper Position
 
-  sdk.event(
+  const logEvent = (message) => {
+    console.log(message);
+    sdk.event(message);
+  };
+
+  logEvent(
     `AirFlowSP ${AirFlowSetpoint.latestValue.value} | MeasuredAirflow ${MeasuredAirflow.latestValue.value} | DamperPos ${DamperPosition.latestValue.value}`
   );
 
   async function sendRequest(count) {
-    sdk.event(`Sending CLSRPREQ request for ${count}`);
+    logEvent(`Sending CLSRPREQ request for ${count}`);
     await sdk.groupVariables.write("CLSPREQ", count);
   }
 
