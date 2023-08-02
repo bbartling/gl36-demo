@@ -1,0 +1,17 @@
+{
+  "hook": {
+    "id": "57ac6aaa-eb94-4c0f-8361-d94b45471768",
+    "name": "reset-supply-air-temp-5.16.2",
+    "entryPoint": "hooks/reset-supply-air-temp-5.16.2.js",
+    "points": {
+      "layer": "automation",
+      "query": {
+        "field": {
+          "property": "label",
+          "text": "Cooling_SP_Requests"
+        }
+      },
+      "groups": { "keys": ["airRef"] }
+    }
+  }
+}

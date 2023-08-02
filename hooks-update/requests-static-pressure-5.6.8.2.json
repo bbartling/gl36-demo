@@ -1,0 +1,62 @@
+{
+  "hook": {
+    "id": "64316280-afbf-465f-97cc-9d734a4a06e4",
+    "name": "requests-static-pressure-5.6.8.2",
+    "entryPoint": "hooks/requests-static-pressure-5.6.8.2.js",
+    "points": {
+      "groups": { "keys": ["equipRef"] },
+      "labelAttribute": "attrs.class",
+      "layer": "default",
+      "annotations": [
+        {
+          "fieldName": "airRef",
+          "layer": "model",
+          "path": [
+            {
+              "sourceProperty": "equipRef",
+              "targetProperty": "id",
+              "valueProperty": "airRef"
+            }
+          ]
+        }
+      ],
+      "query": {
+        "or": [
+          {
+            "field": {
+              "property": "class",
+              "text": "air-flow-sp"
+            }
+          },
+          {
+            "field": {
+              "property": "class",
+              "text": "damper-sensor"
+            }
+          },
+          {
+            "field": {
+              "property": "class",
+              "text": "discharge-air-flow-sensor"
+            }
+          }
+        ]
+      },
+      "groupVariables": [
+        {
+          "label": "inDamperLoop",
+          "attrs": {
+            "description": "Damper Loop Status"
+          }
+        },
+        {
+          "label": "Cooling_SAT_Requests",
+          "attrs": {
+            "description": "Cooling SAT Requests",
+            "ahuRef": "{{points.0.attrs.airRef}}"
+          }
+        }
+      ]
+    }
+  }
+}

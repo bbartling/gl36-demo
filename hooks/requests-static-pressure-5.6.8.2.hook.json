@@ -42,15 +42,20 @@
                 "property": "class",
                 "text": "discharge-air-flow-sensor"
               }
+            },
+            {
+              "field": {
+                "property": "label",
+                "text": "SUPPRESSED_UNTIL"
+              }
             }
           ]
         },
         "groupVariables": [
           {
-            "label": "CLSPREQ",
+            "label": "Cooling_SP_Requests",
             "attrs": {
               "description": "Cooling SP Requests",
-              "testAttr": "josh",
               "ahuRef": "{{points.0.attrs.airRef}}"
             }
           }

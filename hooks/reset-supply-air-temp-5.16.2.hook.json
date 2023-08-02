@@ -8,9 +8,10 @@
         "query": {
           "field": {
             "property": "label",
-            "text": "SUMCLREQ"
+            "text": "Cooling_SP_Requests"
           }
-        }
+        },
+        "groups": { "keys": ["airRef"] }
       }
     }
   }

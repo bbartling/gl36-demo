@@ -1,8 +1,8 @@
 {
   "hook": {
-    "id": "64316280-afbf-465f-97cc-9d734a4a06e4",
-    "name": "static-pressure-reset-requests-5.6.8.2",
-    "entryPoint": "hooks/static-pressure-reset-requests-5.6.8.2.js",
+    "id": "57256b3a-148b-4bc1-a228-4b1293a99391",
+    "name": "requests-supply-air-temp-5.6.8.1",
+    "entryPoint": "hooks/requests-supply-air-temp-5.6.8.1.js",
     "points": {
       "groups": { "keys": ["equipRef"] },
       "labelAttribute": "attrs.class",
@@ -50,9 +50,9 @@
           }
         },
         {
-          "label": "CLSPREQ",
+          "label": "Cooling_SAT_Requests",
           "attrs": {
-            "description": "Cooling SP Requests",
+            "description": "Cooling SAT Requests",
             "testAttr": "josh",
             "ahuRef": "{{points.0.attrs.airRef}}"
           }

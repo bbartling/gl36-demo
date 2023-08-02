@@ -34,7 +34,7 @@ module.exports = async ({ points, sdk }) => {
 
   async function sendRequest(count) {
     logEvent(`Sending CLSRPREQ request for ${count}`);
-    await sdk.groupVariables.write("CLSPREQ", count);
+    await sdk.groupVariables.write("Cooling_SP_Requests", count);
   }
 
   // Damper Loop

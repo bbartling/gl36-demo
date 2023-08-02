@@ -1,7 +1,7 @@
 const NormalSdk = require("@normalframework/applications-sdk");
 const { trimAndRespond } = NormalSdk;
 
-// From ASHRAE Guideline 36_2021, §5.16.1.2 Static Pressure Set-Point Reset
+// From ASHRAE Guideline 36_2021, §5.16.2 Supply Air Temperature Control
 // See also: 5.1.14. Trim & Respond Set-Point Reset Logic
 
 /**
@@ -10,10 +10,15 @@ const { trimAndRespond } = NormalSdk;
  * @returns {NormalSdk.InvokeResult}
  */
 module.exports = async ({ points }) => {
-  const SP0 = points.byLabel("").first().latestValue.value;
+  const allRequests = points.reduce(
+    (acc, point) => (point.latestValue.value ?? 0) + acc,
+    0
+  );
+  const SP0 = points.byLabel("sp-initial-setpoint-class").first()
+    .latestValue.value;
   const Td = "2m";
-  const systemStatus = points.byLabel("").first();
-  const Setpoint = points.byLabel("").first();
+  const systemStatus = points.byLabel("system-status-class").first();
+  const Setpoint = points.byLabel("sp-setpoint-class").first();
 
   const resetToInitial = await systemStatus.ifOnce("off");
   const runTandRLoop = await systemStatus.trueFor(
@@ -23,7 +28,7 @@ module.exports = async ({ points }) => {
 
   await trimAndRespond({
     I: 5,
-    R: 10,
+    R: allRequests,
     SPtrim: -1,
     SPResMax: 4,
     SP0,

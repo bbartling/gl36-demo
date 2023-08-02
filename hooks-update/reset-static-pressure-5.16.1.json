@@ -1,0 +1,17 @@
+{
+  "hook": {
+    "id": "5fcbd95b-42e0-46ab-80e9-46d6bfc65bd3",
+    "name": "reset-static-pressure-5.16.1",
+    "entryPoint": "hooks/reset-static-pressure-5.16.1.js",
+    "points": {
+      "layer": "automation",
+      "query": {
+        "field": {
+          "property": "label",
+          "text": "Cooling_SP_Requests"
+        }
+      },
+      "groups": { "keys": ["airRef"] }
+    }
+  }
+}

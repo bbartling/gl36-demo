@@ -1,0 +1,64 @@
+{
+  "invoke": { "onChange": false, "args": {} },
+  "prepare": {
+    "hook": {
+      "id": "16530f62-1e01-436f-b820-22d0a22896d4",
+      "points": {
+        "grouping": {
+          "oneofKind": "groups",
+          "groups": { "keys": ["equipRef"] }
+        },
+        "labelAttribute": "attrs.class",
+        "layer": "default",
+        "annotations": [
+          {
+            "fieldName": "airRef",
+            "layer": "model",
+            "path": [
+              {
+                "sourceProperty": "equipRef",
+                "targetProperty": "id",
+                "valueProperty": "airRef"
+              }
+            ]
+          }
+        ],
+        "query": {
+          "or": [
+            {
+              "field": { "property": "label", "text": "" }
+            },
+            {
+              "field": {
+                "property": "class",
+                "text": "air-flow-sp"
+              }
+            },
+            {
+              "field": {
+                "property": "class",
+                "text": "damper-sensor"
+              }
+            },
+            {
+              "field": {
+                "property": "class",
+                "text": "discharge-air-flow-sensor"
+              }
+            }
+          ]
+        },
+        "groupVariables": [
+          {
+            "label": "Cooling_SAT_Requests",
+            "attrs": {
+              "description": "Cooling SAT Requests",
+              "testAttr": "josh",
+              "ahuRef": "{{points.0.attrs.airRef}}"
+            }
+          }
+        ]
+      }
+    }
+  }
+}
