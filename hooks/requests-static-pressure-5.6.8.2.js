@@ -81,6 +81,10 @@ module.exports = async ({ points, sdk }) => {
     // send 1 request
   } else if (Number(DamperPosition.latestValue.value) < 95) {
     await sendRequest(0);
+
+    return NormalSdk.InvokeSuccess(
+      `Finished calculating requests for group ${sdk.groupKey}`
+    );
     // else if the Cooling Loop is less than 95%, send 0 requests.
   }
 };

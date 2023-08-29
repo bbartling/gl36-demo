@@ -52,8 +52,7 @@
         {
           "label": "Cooling_SAT_Requests",
           "attrs": {
-            "description": "Cooling SAT Requests",
-            "ahuRef": "{{points.0.attrs.airRef}}"
+            "description": "Cooling SAT Requests"
           }
         }
       ]
