@@ -11,16 +11,21 @@ const getPercentage = (numerator, denominator) => {
  * @param {NormalSdk.InvokeParams} params
  * @returns {NormalSdk.InvokeResult}
  */
-module.exports = async ({ points, sdk }) => {
-  const AirFlowSetpoint = points.byLabel("air-flow-sp").first(); // Desired Airflow
+module.exports = async ({ groupVariables, points, sdk }) => {
+  const AirFlowSetpoint = points.byLabel("discharge-air-flow-sp").first(); // Desired Airflow
   const MeasuredAirflow = points.byLabel("discharge-air-flow-sensor").first(); // VAV Airflow
   const DamperPosition = points.byLabel("damper-sensor").first(); // Damper Position
-  const isInDamperLoop = Boolean(
-    (await sdk.groupVariables.get("inDamperLoop")).latestValue.value
+  const DamperLoop = groupVariables.find(
+    (v) => v.attrs.label === "inDamperLoop"
+  );
+  const Cooling_SP_Requests = groupVariables.find(
+    (v) => v.attrs.label === "Cooling_SP_Requests"
   );
 
+  const isInDamperLoop = Boolean(DamperLoop.latestValue.value);
+
   const setIsInDamperLoop = async (status) => {
-    await sdk.groupVariables.write("inDamperLoop", status ? 1 : 0);
+    await DamperLoop.write(status ? 1 : 0);
   };
 
   const logEvent = (message) => {
@@ -34,7 +39,7 @@ module.exports = async ({ points, sdk }) => {
 
   async function sendRequest(count) {
     logEvent(`Sending CLSRPREQ request for ${count}`);
-    await sdk.groupVariables.write("Cooling_SP_Requests", count);
+    await Cooling_SP_Requests.write(count);
   }
 
   // Damper Loop

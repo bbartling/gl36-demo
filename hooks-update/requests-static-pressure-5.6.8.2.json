@@ -25,7 +25,7 @@
           {
             "field": {
               "property": "class",
-              "text": "air-flow-sp"
+              "text": "discharge-air-flow-sp"
             }
           },
           {
@@ -50,9 +50,9 @@
           }
         },
         {
-          "label": "Cooling_SAT_Requests",
+          "label": "Cooling_SP_Requests",
           "attrs": {
-            "description": "Cooling SAT Requests"
+            "description": "Cooling SP Requests"
           }
         }
       ]
