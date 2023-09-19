@@ -18,9 +18,7 @@ module.exports = async ({ groupVariables, points, sdk }) => {
   const DamperLoop = groupVariables.find(
     (v) => v.attrs.label === "inDamperLoop"
   );
-  const Cooling_SP_Requests = groupVariables.find(
-    (v) => v.attrs.label === "Cooling_SP_Requests"
-  );
+  const Cooling_SP_Requests = groupVariables.byLabel("Cooling_SP_Requests");
 
   const isInDamperLoop = Boolean(DamperLoop.latestValue.value);
 

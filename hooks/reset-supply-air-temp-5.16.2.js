@@ -26,17 +26,17 @@ module.exports = async ({ points }) => {
     (v) => v.valueString === "on"
   );
 
-  await trimAndRespond({
-    I: 5,
-    R: allRequests,
-    SPtrim: -1,
-    SPResMax: 4,
-    SP0,
-    SPmin: 0,
-    SPmax: 20,
-    Setpoint,
-    SPres: 2,
-    resetToInitial,
-    runTandRLoop,
-  });
+  // await trimAndRespond({
+  //   I: 5,
+  //   R: allRequests,
+  //   SPtrim: -1,
+  //   SPResMax: 4,
+  //   SP0,
+  //   SPmin: 0,
+  //   SPmax: 20,
+  //   Setpoint,
+  //   SPres: 2,
+  //   resetToInitial,
+  //   runTandRLoop,
+  // });
 };
