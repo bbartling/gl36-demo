@@ -1,6 +1,6 @@
 {
   "hook": {
-    "id": "sat-trim-and-respond",
+    "id": "0eec120a-8144-4408-9e5f-fbc82223eb36",
     "name": "sat-trim-and-respond",
     "entryPoint": "hooks/sat-trim-and-respond.js",
     "mode": 3,

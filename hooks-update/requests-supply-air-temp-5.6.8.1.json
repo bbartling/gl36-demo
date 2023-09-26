@@ -1,6 +1,6 @@
 {
   "hook": {
-    "id": "requests-supply-air-temp",
+    "id": "b4b4426e-c537-4466-9c1c-12095db99c28",
     "name": "requests-supply-air-temp-5.6.8.1",
     "entryPoint": "hooks/requests-supply-air-temp-5.6.8.1.js",
     "mode": 3,

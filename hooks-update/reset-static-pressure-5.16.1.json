@@ -1,6 +1,6 @@
 {
   "hook": {
-    "id": "reset-static-pressure",
+    "id": "651db495-4b50-4f9f-829b-dad9157090e8",
     "name": "reset-static-pressure-5.16.1",
     "entryPoint": "hooks/reset-static-pressure-5.16.1.js",
     "mode": 3,

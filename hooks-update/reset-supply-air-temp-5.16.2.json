@@ -1,6 +1,6 @@
 {
   "hook": {
-    "id": "reset-supply-air-temp",
+    "id": "95ef9895-5410-49d0-95e3-2aac9c0bc36f",
     "name": "reset-supply-air-temp-5.16.2",
     "entryPoint": "hooks/reset-supply-air-temp-5.16.2.js",
     "points": {

@@ -1,6 +1,6 @@
 {
   "hook": {
-    "id": "requests-static-pressure",
+    "id": "0d73974b-f348-4a83-a05e-da4de852e219",
     "name": "requests-static-pressure-5.6.8.2",
     "entryPoint": "hooks/requests-static-pressure-5.6.8.2.js",
     "mode": 3,

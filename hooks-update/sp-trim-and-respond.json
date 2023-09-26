@@ -1,6 +1,6 @@
 {
   "hook": {
-    "id": "sp-trim-and-respond",
+    "id": "fe123953-eef2-492f-a286-105baa28da6e",
     "name": "sp-trim-and-respond",
     "entryPoint": "hooks/sp-trim-and-respond.js",
     "mode": 3,
