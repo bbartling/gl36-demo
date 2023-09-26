@@ -52,7 +52,6 @@
             "application_id": "gl36-resets",
             "description": "Damper Loop Status",
             "equipRef": "{{ Point.Attrs.equipRef }}",
-            "hook_id": "64316280-afbf-465f-97cc-9d734a4a06e4",
             "label": "inDamperLoop"
           }
         },
@@ -63,7 +62,6 @@
             "airRef": "{{ Point.Attrs.airRef }}",
             "application_id": "gl36-resets",
             "equipRef": "{{ Point.Attrs.equipRef }}",
-            "hook_id": "64316280-afbf-465f-97cc-9d734a4a06e4",
             "label": "Cooling_SP_Requests"
           }
         }

@@ -50,15 +50,13 @@
           "attrs": {
             "airRef": "{{ Point.Attrs.airRef }}",
             "application_id": "gl36-resets",
-            "description": "Cooling SAT Requests",
-            "hook_id": "57256b3a-148b-4bc1-a228-4b1293a99391"
+            "description": "Cooling SAT Requests"
           }
         },
         {
           "uuid": "",
           "label": "SuppressedUntilTime",
           "attrs": {
-            "hook_id": "57256b3a-148b-4bc1-a228-4b1293a99391",
             "airRef": "{{ Point.Attrs.airRef }}",
             "application_id": "gl36-resets",
             "description": "Time Based Suppression for Cooling Setpoint"
