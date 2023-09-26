@@ -1,17 +1,36 @@
 {
   "hook": {
-    "id": "5fcbd95b-42e0-46ab-80e9-46d6bfc65bd3",
+    "id": "reset-static-pressure",
     "name": "reset-static-pressure-5.16.1",
     "entryPoint": "hooks/reset-static-pressure-5.16.1.js",
+    "mode": 3,
     "points": {
-      "layer": "automation",
+      "layer": "default",
       "query": {
         "field": {
           "property": "label",
           "text": "Cooling_SP_Requests"
         }
       },
-      "groups": { "keys": ["airRef"] }
+      "groups": { "keys": ["airRef"] },
+      "groupVariables": [
+        {
+          "uuid": "",
+          "label": "Total SP Requests",
+          "attrs": {
+            "airRef": "{{ Point.Attrs.airRef }}",
+            "equipRef": "{{ Point.Attrs.airRef }}"
+          }
+        }
+      ]
+    },
+    "schedule": {
+      "cron": "",
+      "rrule": "RRULE:FREQ=MINUTELY;INTERVAL=1"
+    },
+    "commandExpiration": {
+      "seconds": 300,
+      "nanos": 0
     }
   }
 }

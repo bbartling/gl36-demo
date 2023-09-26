@@ -1,0 +1,46 @@
+{
+  "hook": {
+    "id": "sp-trim-and-respond",
+    "name": "sp-trim-and-respond",
+    "entryPoint": "hooks/sp-trim-and-respond.js",
+    "mode": 3,
+    "points": {
+      "layer": "default",
+      "labelAttribute": "attrs.class",
+      "query": {
+        "or": [
+          {
+            "field": {
+              "property": "equipRef",
+              "text": "RTU-2"
+            }
+          },
+          {
+            "field": {
+              "property": "equipRef",
+              "text": "RTU-5"
+            }
+          }
+        ]
+      },
+      "groups": { "keys": ["equipRef"] },
+      "groupVariables": [
+        {
+          "uuid": "",
+          "label": "SP_Setpoint",
+          "attrs": {
+            "equipRef": "{{ Point.Attrs.airRef }}"
+          }
+        }
+      ]
+    },
+    "schedule": {
+      "cron": "",
+      "rrule": "RRULE:FREQ=MINUTELY;INTERVAL=2"
+    },
+    "commandExpiration": {
+      "seconds": 300,
+      "nanos": 0
+    }
+  }
+}

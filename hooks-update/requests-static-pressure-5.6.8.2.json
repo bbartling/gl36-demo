@@ -1,8 +1,9 @@
 {
   "hook": {
-    "id": "64316280-afbf-465f-97cc-9d734a4a06e4",
+    "id": "requests-static-pressure",
     "name": "requests-static-pressure-5.6.8.2",
     "entryPoint": "hooks/requests-static-pressure-5.6.8.2.js",
+    "mode": 3,
     "points": {
       "groups": { "keys": ["equipRef"] },
       "labelAttribute": "attrs.class",
@@ -25,12 +26,6 @@
           {
             "field": {
               "property": "class",
-              "text": "discharge-air-flow-sp"
-            }
-          },
-          {
-            "field": {
-              "property": "class",
               "text": "damper-sensor"
             }
           },
@@ -39,23 +34,48 @@
               "property": "class",
               "text": "discharge-air-flow-sensor"
             }
+          },
+          {
+            "field": {
+              "property": "class",
+              "text": "discharge-air-flow-sp"
+            }
           }
         ]
       },
       "groupVariables": [
         {
+          "uuid": "",
           "label": "inDamperLoop",
           "attrs": {
-            "description": "Damper Loop Status"
+            "airRef": "{{ Point.Attrs.airRef }}",
+            "application_id": "gl36-resets",
+            "description": "Damper Loop Status",
+            "equipRef": "{{ Point.Attrs.equipRef }}",
+            "hook_id": "64316280-afbf-465f-97cc-9d734a4a06e4",
+            "label": "inDamperLoop"
           }
         },
         {
+          "uuid": "",
           "label": "Cooling_SP_Requests",
           "attrs": {
-            "description": "Cooling SP Requests"
+            "airRef": "{{ Point.Attrs.airRef }}",
+            "application_id": "gl36-resets",
+            "equipRef": "{{ Point.Attrs.equipRef }}",
+            "hook_id": "64316280-afbf-465f-97cc-9d734a4a06e4",
+            "label": "Cooling_SP_Requests"
           }
         }
       ]
+    },
+    "schedule": {
+      "cron": "",
+      "rrule": "RRULE:FREQ=MINUTELY;INTERVAL=1"
+    },
+    "commandExpiration": {
+      "seconds": 300,
+      "nanos": 0
     }
   }
 }

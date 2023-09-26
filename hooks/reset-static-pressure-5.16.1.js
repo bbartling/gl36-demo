@@ -17,35 +17,7 @@ module.exports = async ({ points, groupVariables, sdk }) => {
     .reduce((a, b) => a + b, 0);
   console.log(sdk.groupKey, requests);
 
-  const RequestVariable = groupVariables.find(
-    (v) => v.attrs.label === "Total Requests"
-  );
-
+  const RequestVariable = groupVariables.byLabel("Total SP Requests");
+  console.log(RequestVariable);
   await RequestVariable.write(requests);
-  // TODO: enable below when ready to implement resets
-
-  // const SP0 = points.byLabel("some-setpoint-class").first().latestValue.value;
-  // const Td = "2m";
-  // const systemStatus = points.byLabel("system-status-class").first();
-  // const Setpoint = points.byLabel("").first();
-
-  // const resetToInitial = await systemStatus.ifOnce("off");
-  // const runTandRLoop = await systemStatus.trueFor(
-  //   Td,
-  //   (v) => v.valueString === "on"
-  // );
-
-  // await trimAndRespond({
-  //   I: 5,
-  //   R: 10,
-  //   SPtrim: -1,
-  //   SPResMax: 4,
-  //   SP0,
-  //   SPmin: 0,
-  //   SPmax: 20,
-  //   Setpoint,
-  //   SPres: 2,
-  //   resetToInitial,
-  //   runTandRLoop,
-  // });
 };

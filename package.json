@@ -7,11 +7,15 @@
   "scripts": {
     "build": "npx tsc",
     "configure": "npx applications-sdk configure",
-    "deploy": "npx applications-sdk deploy"
+    "deploy": "npx applications-sdk deploy",
+    "test": "jest"
   },
   "dependencies": {
     "@normalframework/applications-sdk": "0.1.53"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
 }

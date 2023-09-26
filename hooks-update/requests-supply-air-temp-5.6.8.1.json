@@ -1,8 +1,9 @@
 {
   "hook": {
-    "id": "57256b3a-148b-4bc1-a228-4b1293a99391",
+    "id": "requests-supply-air-temp",
     "name": "requests-supply-air-temp-5.6.8.1",
     "entryPoint": "hooks/requests-supply-air-temp-5.6.8.1.js",
+    "mode": 3,
     "points": {
       "groups": { "keys": ["equipRef"] },
       "labelAttribute": "attrs.class",
@@ -25,37 +26,53 @@
           {
             "field": {
               "property": "class",
-              "text": "air-flow-sp"
+              "text": "cool-cmd"
             }
           },
           {
             "field": {
               "property": "class",
-              "text": "damper-sensor"
+              "text": "zone-air-temp-sensor"
             }
           },
           {
             "field": {
               "property": "class",
-              "text": "discharge-air-flow-sensor"
+              "text": "zone-air-temp-occ-cooling-sp"
             }
           }
         ]
       },
       "groupVariables": [
         {
-          "label": "inDamperLoop",
+          "uuid": "",
+          "label": "Cooling_SAT_Requests",
           "attrs": {
-            "description": "Damper Loop Status"
+            "airRef": "{{ Point.Attrs.airRef }}",
+            "application_id": "gl36-resets",
+            "description": "Cooling SAT Requests",
+            "hook_id": "57256b3a-148b-4bc1-a228-4b1293a99391"
           }
         },
         {
-          "label": "Cooling_SAT_Requests",
+          "uuid": "",
+          "label": "SuppressedUntilTime",
           "attrs": {
-            "description": "Cooling SAT Requests"
+            "hook_id": "57256b3a-148b-4bc1-a228-4b1293a99391",
+            "airRef": "{{ Point.Attrs.airRef }}",
+            "application_id": "gl36-resets",
+            "description": "Time Based Suppression for Cooling Setpoint"
           }
         }
       ]
+    },
+    "schedule": {
+      "cron": "",
+      "rrule": "RRULE:FREQ=MINUTELY;INTERVAL=1"
+    },
+    "commandExpiration": {
+      "seconds": 300,
+      "nanos": 0
     }
   }
 }

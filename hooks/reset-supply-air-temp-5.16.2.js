@@ -10,33 +10,11 @@ const { trimAndRespond } = NormalSdk;
  * @returns {NormalSdk.InvokeResult}
  */
 module.exports = async ({ points }) => {
-  const allRequests = points.reduce(
-    (acc, point) => (point.latestValue.value ?? 0) + acc,
-    0
-  );
-  const SP0 = points.byLabel("sp-initial-setpoint-class").first()
-    .latestValue.value;
-  const Td = "2m";
-  const systemStatus = points.byLabel("system-status-class").first();
-  const Setpoint = points.byLabel("sp-setpoint-class").first();
+  const values = points.map((x) => x.latestValue.value ?? 0);
+  console.log(values);
+  const requests = values.reduce((a, b) => a + b, 0);
+  console.log(sdk.groupKey, requests);
 
-  const resetToInitial = await systemStatus.ifOnce("off");
-  const runTandRLoop = await systemStatus.trueFor(
-    Td,
-    (v) => v.valueString === "on"
-  );
-
-  // await trimAndRespond({
-  //   I: 5,
-  //   R: allRequests,
-  //   SPtrim: -1,
-  //   SPResMax: 4,
-  //   SP0,
-  //   SPmin: 0,
-  //   SPmax: 20,
-  //   Setpoint,
-  //   SPres: 2,
-  //   resetToInitial,
-  //   runTandRLoop,
-  // });
+  const RequestVariable = groupVariables.byLabel("Total SAT Requests");
+  await RequestVariable.write(requests);
 };

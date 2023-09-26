@@ -1,17 +1,36 @@
 {
   "hook": {
-    "id": "57ac6aaa-eb94-4c0f-8361-d94b45471768",
+    "id": "reset-supply-air-temp",
     "name": "reset-supply-air-temp-5.16.2",
     "entryPoint": "hooks/reset-supply-air-temp-5.16.2.js",
     "points": {
       "layer": "automation",
+      "labelAttribute": "attrs.class",
       "query": {
         "field": {
           "property": "label",
-          "text": "Cooling_SP_Requests"
+          "text": "Cooling_SAT_Requests"
         }
       },
-      "groups": { "keys": ["airRef"] }
+      "groups": { "keys": ["airRef"] },
+      "groupVariables": [
+        {
+          "uuid": "",
+          "label": "Total SAT Requests",
+          "attrs": {
+            "airRef": "{{ Point.Attrs.airRef }}",
+            "equipRef": "{{ Point.Attrs.airRef }}"
+          }
+        }
+      ]
+    },
+    "schedule": {
+      "cron": "",
+      "rrule": "RRULE:FREQ=MINUTELY;INTERVAL=1"
+    },
+    "commandExpiration": {
+      "seconds": 300,
+      "nanos": 0
     }
   }
 }
