@@ -37,10 +37,6 @@
     "schedule": {
       "cron": "",
       "rrule": "RRULE:FREQ=MINUTELY;INTERVAL=2"
-    },
-    "commandExpiration": {
-      "seconds": 300,
-      "nanos": 0
     }
   }
 }
