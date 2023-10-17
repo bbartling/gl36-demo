@@ -54,3 +54,13 @@ test("min max works", () => {
   expect(result2).toBe(4.4);
   expect(result3).toBe(7);
 });
+
+test("GL36 example", () => {
+  const coords = [
+    { x: 60, y: 60 },
+    { x: 70, y: 55 },
+  ];
+
+  const result = interpolate(65, coords, { min: 55, max: 65 });
+  expect(result).toBe(57.5);
+});

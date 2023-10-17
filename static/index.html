@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="index.js" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ag-grid-community/dist/ag-grid-community.min.js"></script>
+
+    <script>
+      const params = new Proxy(new URLSearchParams(window.location.search), {
+        get: (searchParams, prop) => searchParams.get(prop),
+      });
+
+      var applicationId = params.applicationId;
+      var apiUrl = window.location.origin;
+      var sdk = new nf(apiUrl);
+    </script>
+  </head>
+
+  <body>
+    <div style="display: grid; grid-template-rows: auto auto">
+      <div id="damperChart2"></div>
+      <div id="damperChart5"></div>
+      <div id="spChart2"></div>
+      <div id="spChart5"></div>
+    </div>
+    <div
+      style="
+        font-family: Helvetica, Arial, sans-serif;
+        font-size: 14px;
+        font-weight: 900;
+        padding: 5px 0px 10px 5px;
+      "
+    >
+      Vav Stats
+    </div>
+    <div
+      id="grid"
+      style="height: 300px; width: 100%"
+      class="ag-theme-alpine"
+    ></div>
+
+    <script type="module">
+      import { createDamperPositionChart } from "./create-damper-position-chart.js";
+      import { createAhuChart } from "./create-ahu-chart.js";
+
+      createDamperPositionChart("RTU-2", "#damperChart2");
+      createDamperPositionChart("RTU-5", "#damperChart5");
+
+      createAhuChart("RTU-2", "#spChart2");
+      createAhuChart("RTU-5", "#spChart5");
+    </script>
+
+    <script type="module">
+      const points = await sdk.getPoints({
+        or: [
+          {
+            field: {
+              property: "class",
+              text: "zone-air-temp-sensor",
+            },
+          },
+          {
+            field: {
+              property: "class",
+              text: "damper-sensor",
+            },
+          },
+          {
+            field: {
+              property: "class",
+              text: "discharge-air-flow-sensor",
+            },
+          },
+          {
+            field: {
+              property: "class",
+              text: "discharge-air-flow-sp",
+            },
+          },
+        ],
+      });
+
+      const grouped = sdk.groupPoints(points, ["equipRef"]);
+
+      const columnDefs = [
+        { field: "vav", sortable: true },
+        { field: "zone-air-temp-sensor", sortable: true },
+        { field: "damper-sensor", sortable: true },
+        { field: "discharge-air-flow-sensor", sortable: true },
+        { field: "discharge-air-flow-sp", sortable: true },
+      ];
+
+      const rowData = [];
+
+      const selectValue = (points, className) => {
+        return points.find((v) => v.attrs.class === className)?.latestValue
+          .valueType.double;
+      };
+
+      grouped.forEach((values, group) => {
+        rowData.push({
+          vav: group,
+          "damper-sensor": selectValue(values, "damper-sensor"),
+          "zone-air-temp-sensor": selectValue(values, "zone-air-temp-sensor"),
+          "discharge-air-flow-sp": selectValue(values, "discharge-air-flow-sp"),
+          "discharge-air-flow-sensor": selectValue(
+            values,
+            "discharge-air-flow-sensor"
+          ),
+        });
+      });
+
+      const gridOptions = {
+        columnDefs: columnDefs,
+        rowData: rowData,
+      };
+
+      const gridDiv = document.querySelector("#grid");
+      new agGrid.Grid(gridDiv, gridOptions);
+    </script>
+  </body>
+</html>
