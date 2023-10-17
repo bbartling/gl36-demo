@@ -9,7 +9,7 @@ const { trimAndRespond } = NormalSdk;
  * @param {NormalSdk.InvokeParams} params
  * @returns {NormalSdk.InvokeResult}
  */
-module.exports = async ({ points }) => {
+module.exports = async ({ points, sdk, groupVariables }) => {
   const values = points.map((x) => x.latestValue.value ?? 0);
   console.log(values);
   const requests = values.reduce((a, b) => a + b, 0);

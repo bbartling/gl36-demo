@@ -10,9 +10,7 @@ const { trimAndRespond } = NormalSdk;
  * @returns {NormalSdk.InvokeResult}
  */
 module.exports = async ({ points, groupVariables, sdk }) => {
-  console.log(points.map((x) => x.latestValue.value));
   const requests = points
-    .byLabel("Cooling_SP_Requests")
     .map((x) => x.latestValue.value)
     .reduce((a, b) => a + b, 0);
   console.log(sdk.groupKey, requests);

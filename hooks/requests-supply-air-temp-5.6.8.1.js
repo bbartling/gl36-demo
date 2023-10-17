@@ -22,11 +22,16 @@ const limit = (value, min, max) => {
  * @returns {NormalSdk.InvokeResult}
  */
 module.exports = async ({ points, sdk, groupVariables }) => {
-  console.log(points.map((p) => p.attrs.class));
-
   const logEvent = async (message) => {
     console.log(message);
     await sdk.event(message);
+  };
+
+  const CoolingBackOff = groupVariables.byLabel("CoolingLoopBackOff");
+  const isInCoolingBackOffLoop = Boolean(CoolingBackOff.latestValue?.value);
+
+  const setIsInCoolingBackOffLoop = async (status) => {
+    await CoolingBackOff.write(status ? 1 : 0);
   };
 
   const ZoneTemperature = points.byLabel("zone-air-temp-sensor").first();
@@ -37,13 +42,15 @@ module.exports = async ({ points, sdk, groupVariables }) => {
 
   if (!ZoneTemperature || !ZoneTemperatureSetpoint || !CoolingLoop) {
     console.log(
-      `Hook was called without required points. Group: ${
+      `Missing required points. Group: ${
         sdk.groupKey
       } ${!!ZoneTemperature} ${!!ZoneTemperatureSetpoint} ${!!CoolingLoop}`
     );
     return {
       result: "error",
-      message: `Hook was called without required points. Group: ${sdk.groupKey}`,
+      message: `Missing required points. Group: ${
+        sdk.groupKey
+      } ${!!ZoneTemperature} ${!!ZoneTemperatureSetpoint} ${!!CoolingLoop}`,
     };
   }
 
@@ -56,6 +63,19 @@ module.exports = async ({ points, sdk, groupVariables }) => {
   async function sendRequest(count) {
     logEvent(`Sending Cooling_SAT_Requests request for ${count}`);
     await groupVariables.byLabel("Cooling_SAT_Requests").write(count);
+  }
+
+  // handle the inner loop created by condition (c) from 5.6.8.1
+  if (isInCoolingBackOffLoop) {
+    if (CoolingLoop.latestValue?.value && CoolingLoop.latestValue.value < 85) {
+      await setIsInCoolingBackOffLoop(false);
+    } else {
+      await sendRequest(1);
+      return {
+        result: "success",
+        message: "Sent 1 request. Staying in CoolingLoop Back Off.",
+      };
+    }
   }
 
   const zoneTemperatureIsChanged = () => {
@@ -76,6 +96,7 @@ module.exports = async ({ points, sdk, groupVariables }) => {
   };
 
   const suppressedUntil = getSuppressedUntilTime() ?? 0;
+
   if (zoneTemperatureIsChanged()) {
     await logEvent(
       `zone temperature is changed. Writing suppression time ${new Date(
@@ -114,7 +135,10 @@ module.exports = async ({ points, sdk, groupVariables }) => {
     CoolingLoop.latestValue.value > 95
   ) {
     await sendRequest(1);
-    return { result: "success", message: "Sent 1 request" };
+    return {
+      result: "success",
+      message: "Sent 1 request. Entering Damper Position Loop.",
+    };
   } else if (
     CoolingLoop.latestValue?.value &&
     CoolingLoop.latestValue.value < 95

@@ -49,7 +49,6 @@
           "label": "inDamperLoop",
           "attrs": {
             "airRef": "{{ Point.Attrs.airRef }}",
-            "application_id": "gl36-resets",
             "description": "Damper Loop Status",
             "equipRef": "{{ Point.Attrs.equipRef }}",
             "label": "inDamperLoop"
@@ -60,7 +59,6 @@
           "label": "Cooling_SP_Requests",
           "attrs": {
             "airRef": "{{ Point.Attrs.airRef }}",
-            "application_id": "gl36-resets",
             "equipRef": "{{ Point.Attrs.equipRef }}",
             "label": "Cooling_SP_Requests"
           }

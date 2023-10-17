@@ -1,5 +1,5 @@
 const NormalSdk = require("@normalframework/applications-sdk");
-import { limit } from "../helpers";
+const { limit } = require("../helpers");
 
 /**
  * Invoke hook function
@@ -7,40 +7,81 @@ import { limit } from "../helpers";
  * @returns {NormalSdk.InvokeResult}
  */
 module.exports = async ({ points, sdk, groupVariables }) => {
-  const logEvent = (message) => {
+  const logEvent = (...message) => {
     console.log(message);
     sdk.event(message);
   };
 
+  logEvent("Starting sp-trim-and-respond");
+
   const totalRequests = points
-    .where((p) => p.attrs.label === "Total SAP Requests")
+    .where((p) => p.attrs.label === "Total SP Requests")
     .first();
-  const R = totalRequests.latestValue.value;
 
-  console.log(sdk.groupKey, totalRequests.latestValue.value);
+  if (!totalRequests) {
+    return {
+      result: "error",
+      message: "Missing Total Requests points in query.",
+    };
+  }
 
-  const SPSetpoint = groupVariables.byLabel("SP_Setpoint");
+  const R = totalRequests.latestValue?.value;
 
-  const SP0 = 120;
-  const SPmin = 25;
-  const SPmax = 200; // TODO: what should this actually be?
+  logEvent(`${sdk.groupKey} - Requests: ${R}`);
+
+  logEvent(
+    "Total setpoints",
+    points.byLabel("discharge-air-pressure-sp").length
+  );
+
+  const DischargeAirPressureSp = points
+    .byLabel("discharge-air-pressure-sp")
+    .first();
+
+  const dischargeAirPressureSpValue =
+    DischargeAirPressureSp.latestValue?.value ?? 0;
+
+  const bounds = {
+    "RTU-2": { min: 0.4, max: 1.75, initial: 1.25 },
+    "RTU-5": { min: 0.6, max: 1.75, initial: 1.25 },
+  };
+
+  // const bounds = {
+  //   "RTU-2": { min: .9, max: 1.1 },
+  //   "RTU-5": { min: 1.45, max: 1.55 }
+  // }
+
+  const bound = bounds[sdk.groupKey];
+
+  if (!bound) {
+    return { result: "error", message: "Cannot get bounds for group." };
+  }
+
+  const SP0 = bound.initial;
+  const SPmin = bound.min;
+  const SPmax = bound.max;
   const Td = "10m";
   const T = "2m";
-  const I = 2;
-  const SPtrim = -12;
-  const SPres = 15;
-  const SPResMax = 32;
+  const I = 6;
+  const SPtrim = -0.05;
+  const SPres = 0.06;
+  const SPResMax = 0.13;
 
   const systemStatus = points.byLabel("fan-run-cmd").first();
 
+  console.log(systemStatus.latestValue);
   const resetToInitial =
     systemStatus?.latestValue.value === 1 &&
     systemStatus.latestValue.ts.getTime() === systemStatus.changeTime.getTime();
 
   if (resetToInitial) {
     logEvent("resetting to original");
-    await SPSetpoint.write(SP0);
-    return;
+    const result = await DischargeAirPressureSp.write({ real: SP0 }, 7);
+
+    return {
+      result: "success",
+      message: `Reset to initial ${SP0}`,
+    };
   }
 
   const runTandRLoop = await systemStatus.trueFor(Td, (v) => v.value === 1);
@@ -50,24 +91,62 @@ module.exports = async ({ points, sdk, groupVariables }) => {
   if (runTandRLoop) {
     // trim
     if (R <= I) {
+      logEvent("trimming");
       const newSetpoint = limit(
-        DischargeAirTempSp.latestValue?.value ?? 0 + SPtrim,
+        dischargeAirPressureSpValue + SPtrim,
         SPmin,
         SPmax
       );
-      logEvent(`Trimming to ${newSetpoint}`);
-      await SPSetpoint.write(newSetpoint);
+      // logEvent(`Trimming to ${newSetpoint}`);
+      logEvent(
+        JSON.stringify({ dischargeAirPressureSpValue, SPtrim, newSetpoint })
+      );
+      const result = await DischargeAirPressureSp.write(
+        { real: newSetpoint },
+        7
+      );
+      // logEvent("Write Result", JSON.stringify(result));
+      return {
+        result: "success",
+        message: `Reset to ${newSetpoint}`,
+      };
+      // await TestSPSetpoint.write(newSetpoint);
     }
     // respond
     else {
+      logEvent("responding");
       const respondAmount = Math.min(SPres * (R - I), SPResMax);
       const newSetpoint = limit(
-        DischargeAirTempSp.latestValue?.value ?? 0 + respondAmount,
+        dischargeAirPressureSpValue + respondAmount,
         SPmin,
         SPmax
       );
-      logEvent(`Responding to ${newSetpoint}`);
-      await SPSetpoint.write(newSetpoint);
+
+      logEvent(
+        JSON.stringify(
+          {
+            respondAmount,
+            newSetpoint,
+            dischargeAirPressureSpValue,
+            SPres,
+            R,
+            I,
+            SPResMax,
+          },
+          null,
+          2
+        )
+      );
+
+      const result = await DischargeAirPressureSp.write(
+        { real: newSetpoint },
+        7
+      );
+      logEvent("Write Result", JSON.stringify(result));
+      return {
+        result: "success",
+        message: `Reset to ${newSetpoint}`,
+      };
     }
   }
 };

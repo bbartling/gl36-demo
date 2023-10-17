@@ -6,6 +6,7 @@
     "mode": 3,
     "points": {
       "layer": "default",
+      "label_attribute": "attrs.class",
       "query": {
         "field": {
           "property": "label",

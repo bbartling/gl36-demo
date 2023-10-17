@@ -49,7 +49,6 @@
           "label": "Cooling_SAT_Requests",
           "attrs": {
             "airRef": "{{ Point.Attrs.airRef }}",
-            "application_id": "gl36-resets",
             "description": "Cooling SAT Requests"
           }
         },
@@ -58,8 +57,14 @@
           "label": "SuppressedUntilTime",
           "attrs": {
             "airRef": "{{ Point.Attrs.airRef }}",
-            "application_id": "gl36-resets",
             "description": "Time Based Suppression for Cooling Setpoint"
+          }
+        },
+        {
+          "uuid": "",
+          "label": "CoolingLoopBackOff",
+          "attrs": {
+            "airRef": "{{ Point.Attrs.airRef }}"
           }
         }
       ]
