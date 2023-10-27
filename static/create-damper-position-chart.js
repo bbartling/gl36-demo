@@ -9,7 +9,7 @@ export const createDamperPositionChart = async (ahuId, elementSelector) => {
   const points = allPoints.filter((p) => p.attrs.airRef === ahuId);
 
   const start = new Date();
-  start.setHours(start.getHours() - 1);
+  start.setHours(start.getHours() - 24);
   const end = new Date();
 
   const getTimeSeries = async (points, startDate, endDate) => {
@@ -74,6 +74,28 @@ export const createDamperPositionChart = async (ahuId, elementSelector) => {
     },
     xaxis: {
       type: "datetime",
+      labels: {
+        hideOverlappingLabels: true,
+        rotate: 0,
+        formatter: function (value, timestamp) {
+          const date = new Date(timestamp);
+          return (
+            date.toLocaleDateString("en-US", {
+              month: "numeric",
+              day: "numeric",
+            }) +
+            " " +
+            date.toLocaleTimeString("en-US", { hour12: false })
+          );
+        },
+      },
+    },
+    yaxis: {
+      max: 100,
+      ticks: 5,
+      labels: {
+        formatter: (v) => v.toFixed(0),
+      },
     },
     markers: {
       size: 6,

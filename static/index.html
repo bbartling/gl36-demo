@@ -7,6 +7,27 @@
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="https://cdn.jsdelivr.net/npm/ag-grid-community/dist/ag-grid-community.min.js"></script>
 
+    <style>
+      body {
+        background-color: #f4f6f9;
+      }
+
+      @media screen and (min-width: 1000px) {
+        .grid {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      .item {
+        background-color: white;
+        border-radius: 20px;
+        padding: 20px 20px 0 20px;
+        box-shadow: 0px 2px 6px 0px rgba(13, 10, 44, 0.08);
+        margin: 10px;
+      }
+    </style>
+
     <script>
       const params = new Proxy(new URLSearchParams(window.location.search), {
         get: (searchParams, prop) => searchParams.get(prop),
@@ -14,16 +35,17 @@
 
       var applicationId = params.applicationId;
       var apiUrl = window.location.origin;
+      // var apiUrl = "http://8.15.101.124:8080";
       var sdk = new nf(apiUrl);
     </script>
   </head>
 
   <body>
-    <div style="display: grid; grid-template-rows: auto auto">
-      <div id="damperChart2"></div>
-      <div id="damperChart5"></div>
-      <div id="spChart2"></div>
-      <div id="spChart5"></div>
+    <div class="grid">
+      <div class="item" id="damperChart2"></div>
+      <div class="item" id="damperChart5"></div>
+      <div class="item" id="spChart2"></div>
+      <div class="item" id="spChart5"></div>
     </div>
     <div
       style="
@@ -37,7 +59,7 @@
     </div>
     <div
       id="grid"
-      style="height: 300px; width: 100%"
+      style="height: 500px; width: 100%"
       class="ag-theme-alpine"
     ></div>
 

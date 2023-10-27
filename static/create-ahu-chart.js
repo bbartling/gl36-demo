@@ -46,7 +46,7 @@ export const createAhuChart = async (ahuId, rootElementId) => {
   });
 
   const start = new Date();
-  start.setHours(start.getHours() - 1);
+  start.setHours(start.getHours() - 24);
   const end = new Date();
 
   const getTimeSeries = async (point, startDate, endDate, name) => {
@@ -126,6 +126,21 @@ export const createAhuChart = async (ahuId, rootElementId) => {
     },
     xaxis: {
       type: "datetime",
+      labels: {
+        hideOverlappingLabels: true,
+        rotate: 0,
+        formatter: function (value, timestamp) {
+          const date = new Date(timestamp);
+          return (
+            date.toLocaleDateString("en-US", {
+              month: "numeric",
+              day: "numeric",
+            }) +
+            " " +
+            date.toLocaleTimeString("en-US", { hour12: false })
+          );
+        },
+      },
     },
     yaxis: [
       {
@@ -134,7 +149,7 @@ export const createAhuChart = async (ahuId, rootElementId) => {
           text: "SP Setpoint",
         },
         labels: {
-          formatter: (v) => v.toFixed(2),
+          formatter: (v) => v.toFixed(0),
         },
       },
       {
@@ -143,7 +158,7 @@ export const createAhuChart = async (ahuId, rootElementId) => {
           text: "SP Sensor",
         },
         labels: {
-          formatter: (v) => v.toFixed(2),
+          formatter: (v) => v.toFixed(0),
         },
       },
       {
@@ -153,7 +168,7 @@ export const createAhuChart = async (ahuId, rootElementId) => {
           text: "Requests",
         },
         labels: {
-          formatter: (v) => v.toFixed(2),
+          formatter: (v) => v.toFixed(0),
         },
       },
     ],

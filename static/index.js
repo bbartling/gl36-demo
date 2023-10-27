@@ -34410,9 +34410,10 @@
         getData(uuids, from, to) {
             return __awaiter$3(this, void 0, void 0, function* () {
                 let window = 300;
+                let method = GetDataRequest_ResampleMethod.NONE;
                 if (to.getTime() - from.getTime() > 60 * 60 * 8 * 1000) {
-                    window = 1500;
-                    console.log(1500);
+                    window = 1800;
+                    method = GetDataRequest_ResampleMethod.AVERAGE;
                 }
                 const fromSeconds = Math.floor(from.getTime() / 1000);
                 const toSeconds = Math.floor(to.getTime() / 1000);
@@ -34420,8 +34421,8 @@
                     uuids,
                     from: { seconds: fromSeconds },
                     to: { seconds: toSeconds },
-                    method: GetDataRequest_ResampleMethod.NONE,
-                    window: { seconds: window },
+                    method,
+                    window: Duration.create({ seconds: window }),
                     reverse: true,
                 }));
                 return res.response.data;
