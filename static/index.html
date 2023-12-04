@@ -6,10 +6,29 @@
     <script src="index.js" type="text/javascript"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="https://cdn.jsdelivr.net/npm/ag-grid-community/dist/ag-grid-community.min.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+    />
 
     <style>
       body {
         background-color: #f4f6f9;
+      }
+
+      .wrapper {
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .chart-wrapper {
+        background-color: white;
+        border-radius: 20px;
+        padding: 20px 20px 0 20px;
+        box-shadow: 0px 2px 6px 0px rgba(13, 10, 44, 0.08);
+        margin: 10px;
       }
 
       @media screen and (min-width: 1000px) {
@@ -27,7 +46,6 @@
         margin: 10px;
       }
     </style>
-
     <script>
       const params = new Proxy(new URLSearchParams(window.location.search), {
         get: (searchParams, prop) => searchParams.get(prop),
@@ -35,112 +53,55 @@
 
       var applicationId = params.applicationId;
       var apiUrl = window.location.origin;
-      // var apiUrl = "http://8.15.101.124:8080";
       var sdk = new nf(apiUrl);
     </script>
   </head>
 
   <body>
-    <div class="grid">
-      <div class="item" id="damperChart2"></div>
-      <div class="item" id="damperChart5"></div>
-      <div class="item" id="spChart2"></div>
-      <div class="item" id="spChart5"></div>
-    </div>
-    <div
-      style="
-        font-family: Helvetica, Arial, sans-serif;
-        font-size: 14px;
-        font-weight: 900;
-        padding: 5px 0px 10px 5px;
-      "
-    >
-      Vav Stats
-    </div>
-    <div
-      id="grid"
-      style="height: 500px; width: 100%"
-      class="ag-theme-alpine"
-    ></div>
+    <div id="app"></div>
 
     <script type="module">
-      import { createDamperPositionChart } from "./create-damper-position-chart.js";
-      import { createAhuChart } from "./create-ahu-chart.js";
+      import AhuSPChart from "./ahu-sp-chart.js";
+      import DamperSPChart from "./damper-sp-chart.js";
+      import AhuSATChart from "./ahu-sat-chart.js";
+      import DamperSATChart from "./damper-sat-chart.js";
 
-      createDamperPositionChart("RTU-2", "#damperChart2");
-      createDamperPositionChart("RTU-5", "#damperChart5");
+      import VavStats from "./vav-stats.js";
+      const { createApp, ref } = Vue;
 
-      createAhuChart("RTU-2", "#spChart2");
-      createAhuChart("RTU-5", "#spChart5");
-    </script>
-
-    <script type="module">
-      const points = await sdk.getPoints({
-        or: [
-          {
-            field: {
-              property: "class",
-              text: "zone-air-temp-sensor",
-            },
-          },
-          {
-            field: {
-              property: "class",
-              text: "damper-sensor",
-            },
-          },
-          {
-            field: {
-              property: "class",
-              text: "discharge-air-flow-sensor",
-            },
-          },
-          {
-            field: {
-              property: "class",
-              text: "discharge-air-flow-sp",
-            },
-          },
-        ],
-      });
-
-      const grouped = sdk.groupPoints(points, ["equipRef"]);
-
-      const columnDefs = [
-        { field: "vav", sortable: true },
-        { field: "zone-air-temp-sensor", sortable: true },
-        { field: "damper-sensor", sortable: true },
-        { field: "discharge-air-flow-sensor", sortable: true },
-        { field: "discharge-air-flow-sp", sortable: true },
-      ];
-
-      const rowData = [];
-
-      const selectValue = (points, className) => {
-        return points.find((v) => v.attrs.class === className)?.latestValue
-          .valueType.double;
-      };
-
-      grouped.forEach((values, group) => {
-        rowData.push({
-          vav: group,
-          "damper-sensor": selectValue(values, "damper-sensor"),
-          "zone-air-temp-sensor": selectValue(values, "zone-air-temp-sensor"),
-          "discharge-air-flow-sp": selectValue(values, "discharge-air-flow-sp"),
-          "discharge-air-flow-sensor": selectValue(
-            values,
-            "discharge-air-flow-sensor"
-          ),
-        });
-      });
-
-      const gridOptions = {
-        columnDefs: columnDefs,
-        rowData: rowData,
-      };
-
-      const gridDiv = document.querySelector("#grid");
-      new agGrid.Grid(gridDiv, gridOptions);
+      createApp({
+        setup() {
+          const equips = ref(["RTU-2", "RTU-5"]);
+          const selectedEquip = ref("RTU-2");
+          return {
+            equips,
+            selectedEquip,
+          };
+        },
+        components: {
+          AhuSPChart: AhuSPChart,
+          DamperSPChart: DamperSPChart,
+          AhuSATChart: AhuSATChart,
+          DamperSATChart: DamperSATChart,
+          VavStats: VavStats,
+        },
+        template: `
+        <div class="wrapper">
+            <select class="form-select" v-model="selectedEquip" style="width: 200px">
+              <option v-for="option in equips" :value="option">
+                {{ option }}
+              </option>
+            </select>
+          <div class="grid">
+            <AhuSPChart :key="selectedEquip" :equipRef="selectedEquip" />
+            <DamperSPChart :key="selectedEquip" :equipRef="selectedEquip" />
+            <AhuSATChart :key="selectedEquip" :equipRef="selectedEquip" />
+            <DamperSATChart :key="selectedEquip" :equipRef="selectedEquip" />
+          </div>
+          <VavStats :key="selectedEquip" :equipRef="selectedEquip" />
+        </div>
+        `,
+      }).mount("#app");
     </script>
   </body>
 </html>
