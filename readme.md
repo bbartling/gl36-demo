@@ -9,7 +9,7 @@
   <h3 align="center">Guideline 36 Plugin</h3>
 
   <p align="center">
-    A Normal Framework plugin that implements ASHRAE Guideline 36 control sequences.
+    A Normal Framework plugin that implements ASHRAE Guideline 36 control sequences. Currently, the plugin only handles AHU resets.
   </p>
 </div>
 
