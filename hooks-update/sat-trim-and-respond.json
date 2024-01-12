@@ -31,6 +31,27 @@
           "attrs": {
             "equipRef": "{{ Point.Attrs.airRef }}"
           }
+        },
+        {
+          "uuid": "",
+          "label": "tMax",
+          "attrs": {
+            "equipRef": "{{ Point.Attrs.airRef }}"
+          }
+        },
+        {
+          "uuid": "",
+          "label": "IgnoredRequests",
+          "attrs": {
+            "equipRef": "{{ Point.Attrs.airRef }}"
+          }
+        },
+        {
+          "uuid": "",
+          "label": "maxClgSAT",
+          "attrs": {
+            "equipRef": "{{ Point.Attrs.airRef }}"
+          }
         }
       ]
     },

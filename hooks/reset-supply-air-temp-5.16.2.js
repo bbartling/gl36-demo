@@ -17,4 +17,5 @@ module.exports = async ({ points, sdk, groupVariables }) => {
 
   const RequestVariable = groupVariables.byLabel("Total SAT Requests");
   await RequestVariable.write(requests);
+  return {result: "success", message: `Request Total: ${requests}`}
 };

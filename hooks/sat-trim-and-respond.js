@@ -1,7 +1,8 @@
 const NormalSdk = require("@normalframework/applications-sdk");
 const { interpolate, limit } = require("../helpers");
 
-/**
+
+/** 
  * Invoke hook function
  * @param {NormalSdk.InvokeParams} params
  * @returns {NormalSdk.InvokeResult}
@@ -9,26 +10,26 @@ const { interpolate, limit } = require("../helpers");
 module.exports = async ({ points, groupVariables, sdk }) => {
   try {
     const minClgSAT = 55;
-    const maxClgSAT = 65;
+    const maxClgSAT = groupVariables.byLabel("maxClgSAT")?.latestValue.value ?? 70;
     const OATMin = 60;
     const OATMax = 70;
 
     const logEvent = (message) => {
       console.log(message);
       sdk.event(message);
-    };
+    }; 
 
     const totalRequests = points
-      .where((p) => p.attrs.label === "Total SP Requests")
+      .where((p) => p.attrs.label === "Total SAT Requests")
       .first();
-    const R = totalRequests.latestValue.value;
+    
+      const R = totalRequests.latestValue.value;
 
-    console.log(sdk.groupKey, totalRequests.latestValue.value);
+    sdk.logEvent(sdk.groupKey, totalRequests.latestValue.value);
 
-    const actualSATSetpoint =
-      points.byLabel("discharge-air-temp-sp").first().latestValue?.value ?? 0;
-    const TestSATSetpoint = groupVariables.byLabel("SAT_Setpoint");
-    // TODO: is this a good tag?
+    const SATSetpoint =
+      points.byLabel("discharge-air-temp-sp").first();
+
     const outsideAirTemp = points.byLabel("air-temp-sensor").first()
       ?.latestValue.value;
     if (!outsideAirTemp) {
@@ -37,6 +38,8 @@ module.exports = async ({ points, groupVariables, sdk }) => {
         message: "Missing required point 'air-temp-sensor'",
       };
     }
+
+    sdk.logEvent("ignored requests", groupVariables.byLabel("IgnoredRequests").latestValue.value)
 
     const SP0 = maxClgSAT;
     const SPmin = minClgSAT;
@@ -52,42 +55,42 @@ module.exports = async ({ points, groupVariables, sdk }) => {
     const resetToInitial =
       systemStatus?.latestValue.value === 1 &&
       systemStatus.latestValue.ts.getTime() ===
-        systemStatus.changeTime.getTime();
+      systemStatus.changeTime.getTime();
 
     if (resetToInitial) {
       logEvent("resetting to initial");
-      await TestSATSetpoint.write(SP0);
+      await SATSetpoint.write({ real: SP0 });
       return;
     }
 
     const runTandRLoop = await systemStatus.trueFor(Td, (v) => v.value === 1);
 
-    //   logEvent(`Run TandR Loop: ${runTandRLoop}`);
-    logEvent(
-      JSON.stringify(
-        {
-          actualSATSetpoint,
-          minClgSAT,
-          maxClgSAT,
-          OATMin,
-          OATMax,
-          SP0,
-          SPmin,
-          SPmax,
-          Td,
-          T,
-          I,
-          SPtrim,
-          SPres,
-          SPResMax,
-          runTandRLoop,
-          outsideAirTemp,
-          R,
-        },
-        null,
-        2
-      )
-    );
+    //   Un-comment for debugging
+    // logEvent(
+    //   JSON.stringify(
+    //     {
+    //       actualSATSetpoint,
+    //       minClgSAT,
+    //       maxClgSAT,
+    //       OATMin,
+    //       OATMax,
+    //       SP0,
+    //       SPmin,
+    //       SPmax,
+    //       Td,
+    //       T,
+    //       I,
+    //       SPtrim,
+    //       SPres,
+    //       SPResMax,
+    //       runTandRLoop,
+    //       outsideAirTemp,
+    //       R,
+    //     },
+    //     null,
+    //     2
+    //   )
+    // );
 
     const getProportionalSetpoint = (tMax) => {
       return interpolate(
@@ -98,35 +101,40 @@ module.exports = async ({ points, groupVariables, sdk }) => {
         ],
         { min: minClgSAT, max: maxClgSAT }
       );
-    };
+    }; 
 
     if (runTandRLoop) {
       logEvent("running tandr");
       // trim
       if (R <= I) {
+        
         logEvent("trimming");
-        const tMax = limit(actualSATSetpoint + SPtrim, SPmin, SPmax);
-        logEvent(`Tmax: ${tMax}, Test: ${actualSATSetpoint + SPtrim}`);
+        const currentSetpoint = SATSetpoint?.latestValue?.value || 0;
+        const tMax = limit(currentSetpoint + SPtrim, SPmin, SPmax);
+        await groupVariables.byLabel("tMax")?.write(tMax);
+        logEvent(`Tmax: ${tMax}, Test: ${currentSetpoint + SPtrim}`);
         const newSetpoint = getProportionalSetpoint(tMax);
-        await TestSATSetpoint.write(newSetpoint);
+        await SATSetpoint.write({ real: newSetpoint });
         console(`Trimming to ${newSetpoint}`);
         return { result: "success", message: `Trimming to ${newSetpoint}` };
       }
       // respond
       else {
         logEvent("responding");
-        const respondAmount = Math.min(SPres * (R - I), SPResMax);
-        const tMax = limit(actualSATSetpoint + respondAmount, SPmin, SPmax);
-        logEvent(`Tmax: ${tMax} Test: ${actualSATSetpoint + respondAmount}`);
+        const respondAmount = Math.max(SPres * (R - I), SPResMax);
+        const currentSetpoint = SATSetpoint?.latestValue?.value || 0;
+        logEvent("respond amount: " + respondAmount)
+        logEvent("setpoint: " + currentSetpoint)
+        const tMax = limit(currentSetpoint + respondAmount, SPmin, SPmax);
+        await groupVariables.byLabel("tMax")?.write(tMax);
         const newSetpoint = getProportionalSetpoint(tMax);
-        await TestSATSetpoint.write(newSetpoint);
+        await SATSetpoint.write({ real: newSetpoint });
         logEvent(`Responding to ${newSetpoint}`);
         return { result: "success", message: `Responding to ${newSetpoint}` };
       }
     }
   } catch (e) {
-    console.log(message);
-    sdk.event(e.message);
+    sdk.logEvent(e.message)
     throw e;
   }
 };

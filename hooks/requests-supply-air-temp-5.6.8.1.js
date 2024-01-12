@@ -78,10 +78,6 @@ module.exports = async ({ points, sdk, groupVariables }) => {
     }
   }
 
-  const zoneTemperatureIsChanged = () => {
-    ZoneTemperatureSetpoint.latestValue.ts.getTime() ===
-      ZoneTemperatureSetpoint.changeTime.getTime();
-  };
   const getSuppressedUntilTime = () => {
     // how long should it be suppressed
     const supressionMinutes = limit(
@@ -97,7 +93,7 @@ module.exports = async ({ points, sdk, groupVariables }) => {
 
   const suppressedUntil = getSuppressedUntilTime() ?? 0;
 
-  if (zoneTemperatureIsChanged()) {
+  if (ZoneTemperatureSetpoint.isChanged()) {
     await logEvent(
       `zone temperature is changed. Writing suppression time ${new Date(
         suppressedUntil

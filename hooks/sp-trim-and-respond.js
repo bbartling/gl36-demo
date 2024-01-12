@@ -63,9 +63,9 @@ module.exports = async ({ points, sdk, groupVariables }) => {
   const Td = "10m";
   const T = "2m";
   const I = 6;
-  const SPtrim = -0.05;
-  const SPres = 0.06;
-  const SPResMax = 0.13;
+  const SPtrim = -0.02;
+  const SPres = 0.04;
+  const SPResMax = 0.08;
 
   const systemStatus = points.byLabel("fan-run-cmd").first();
 
@@ -76,7 +76,7 @@ module.exports = async ({ points, sdk, groupVariables }) => {
 
   if (resetToInitial) {
     logEvent("resetting to original");
-    const result = await DischargeAirPressureSp.write({ real: SP0 }, 7);
+    const result = await DischargeAirPressureSp.write({ real: SP0 });
 
     return {
       result: "success",
@@ -102,8 +102,7 @@ module.exports = async ({ points, sdk, groupVariables }) => {
         JSON.stringify({ dischargeAirPressureSpValue, SPtrim, newSetpoint })
       );
       const result = await DischargeAirPressureSp.write(
-        { real: newSetpoint },
-        7
+        { real: newSetpoint }
       );
       // logEvent("Write Result", JSON.stringify(result));
       return {
@@ -139,8 +138,7 @@ module.exports = async ({ points, sdk, groupVariables }) => {
       );
 
       const result = await DischargeAirPressureSp.write(
-        { real: newSetpoint },
-        7
+        { real: newSetpoint }
       );
       logEvent("Write Result", JSON.stringify(result));
       return {
