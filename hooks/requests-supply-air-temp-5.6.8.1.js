@@ -34,6 +34,7 @@ module.exports = async ({ points, sdk, groupVariables }) => {
     await CoolingBackOff.write(status ? 1 : 0);
   };
 
+  const VavEquip = points.byLabel("vav").first(); // Current VAV
   const ZoneTemperature = points.byLabel("zone-air-temp-sensor").first();
   const ZoneTemperatureSetpoint = points
     .byLabel("zone-air-temp-occ-cooling-sp")
@@ -61,8 +62,9 @@ module.exports = async ({ points, sdk, groupVariables }) => {
   );
 
   async function sendRequest(count) {
-    logEvent(`Sending Cooling_SAT_Requests request for ${count}`);
-    await groupVariables.byLabel("Cooling_SAT_Requests").write(count);
+    const adjustedRequests = (VavEquip?.attrs.importanceMultiplier ?? 1) * count;
+    logEvent(`Sending Cooling_SAT_Requests request for ${adjustedRequests}`);
+    await groupVariables.byLabel("Cooling_SAT_Requests").write({real: adjustedRequests});
   }
 
   // handle the inner loop created by condition (c) from 5.6.8.1

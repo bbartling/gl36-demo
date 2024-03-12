@@ -12,6 +12,7 @@ const getPercentage = (numerator, denominator) => {
  * @returns {NormalSdk.InvokeResult}
  */
 module.exports = async ({ groupVariables, points, sdk }) => {
+  const VavEquip = points.byLabel("vav").first(); // Current VAV
   const AirFlowSetpoint = points.byLabel("discharge-air-flow-sp").first(); // Desired Airflow
   const MeasuredAirflow = points.byLabel("discharge-air-flow-sensor").first(); // VAV Airflow
   const DamperPosition = points.byLabel("damper-sensor").first(); // Damper Position
@@ -36,8 +37,9 @@ module.exports = async ({ groupVariables, points, sdk }) => {
   );
 
   async function sendRequest(count) {
-    logEvent(`Sending CLSRPREQ request for ${count}`);
-    await Cooling_SP_Requests.write(count);
+    const adjustedRequests = (VavEquip?.attrs.importanceMultiplier ?? 1) * count;
+    logEvent(`Sending CLSRPREQ request for ${adjustedRequests}`);
+    await Cooling_SP_Requests.write({real: adjustedRequests});
   }
 
   // Damper Loop

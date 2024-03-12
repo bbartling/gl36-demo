@@ -5,7 +5,7 @@
     "entryPoint": "hooks/requests-static-pressure-5.6.8.2.js",
     "mode": 3,
     "points": {
-      "groups": { "keys": ["equipRef"] },
+      "groupFunction": "function groupFn({attrs}) { const isEquip = attrs.class === 'vav'; if(isEquip) { return attrs.id; } else { return attrs.equipRef; } }",
       "labelAttribute": "attrs.class",
       "layer": "default",
       "annotations": [
@@ -23,6 +23,12 @@
       ],
       "query": {
         "or": [
+          {
+            "field": {
+              "property": "class",
+              "text": "vav"
+            }
+          },
           {
             "field": {
               "property": "class",
