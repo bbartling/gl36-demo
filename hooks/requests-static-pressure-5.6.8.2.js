@@ -27,18 +27,13 @@ module.exports = async ({ groupVariables, points, sdk }) => {
     await DamperLoop.write(status ? 1 : 0);
   };
 
-  const logEvent = (message) => {
-    console.log(message);
-    sdk.event(message);
-  };
-
-  logEvent(
+  sdk.logEvent(
     `AirFlowSP ${AirFlowSetpoint.latestValue.value} | MeasuredAirflow ${MeasuredAirflow.latestValue.value} | DamperPos ${DamperPosition.latestValue.value}`
   );
 
   async function sendRequest(count) {
     const adjustedRequests = (VavEquip?.attrs.importanceMultiplier ?? 1) * count;
-    logEvent(`Sending CLSRPREQ request for ${adjustedRequests}`);
+    sdk.logEvent(`Sending CLSRPREQ request for ${adjustedRequests}`);
     await Cooling_SP_Requests.write({real: adjustedRequests});
   }
 

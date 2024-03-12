@@ -22,10 +22,6 @@ const limit = (value, min, max) => {
  * @returns {NormalSdk.InvokeResult}
  */
 module.exports = async ({ points, sdk, groupVariables }) => {
-  const logEvent = async (message) => {
-    console.log(message);
-    await sdk.event(message);
-  };
 
   const CoolingBackOff = groupVariables.byLabel("CoolingLoopBackOff");
   const isInCoolingBackOffLoop = Boolean(CoolingBackOff.latestValue?.value);
@@ -63,7 +59,7 @@ module.exports = async ({ points, sdk, groupVariables }) => {
 
   async function sendRequest(count) {
     const adjustedRequests = (VavEquip?.attrs.importanceMultiplier ?? 1) * count;
-    logEvent(`Sending Cooling_SAT_Requests request for ${adjustedRequests}`);
+    sdk.logEvent(`Sending Cooling_SAT_Requests request for ${adjustedRequests}`);
     await groupVariables.byLabel("Cooling_SAT_Requests").write({real: adjustedRequests});
   }
 
@@ -96,7 +92,7 @@ module.exports = async ({ points, sdk, groupVariables }) => {
   const suppressedUntil = getSuppressedUntilTime() ?? 0;
 
   if (ZoneTemperatureSetpoint.isChanged()) {
-    await logEvent(
+    sdk.logEvent(
       `zone temperature is changed. Writing suppression time ${new Date(
         suppressedUntil
       ).toISOString()} minutes`
@@ -104,11 +100,11 @@ module.exports = async ({ points, sdk, groupVariables }) => {
     await groupVariables.byLabel("SuppressedUntilTime").write(suppressedUntil);
     return;
   } else if (suppressedUntil > new Date().getTime()) {
-    await logEvent("is suppressed");
+    sdk.logEvent("is suppressed");
     return;
   }
 
-  await logEvent("Not suppressed. Proceeding to calculate requests.");
+  sdk.logEvent("Not suppressed. Proceeding to calculate requests.");
 
   if (
     ZoneTemperatureSetpoint?.latestValue?.value &&

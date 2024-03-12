@@ -14,11 +14,6 @@ module.exports = async ({ points, groupVariables, sdk }) => {
     const OATMin = 60;
     const OATMax = 70;
 
-    const logEvent = (message) => {
-      console.log(message);
-      sdk.event(message);
-    }; 
-
     const totalRequests = points
       .where((p) => p.attrs.label === "Total SAT Requests")
       .first();
@@ -58,7 +53,7 @@ module.exports = async ({ points, groupVariables, sdk }) => {
       systemStatus.changeTime.getTime();
 
     if (resetToInitial) {
-      logEvent("resetting to initial");
+      sdk.logEvent("resetting to initial");
       await SATSetpoint.write({ real: SP0 });
       return;
     }
@@ -104,15 +99,15 @@ module.exports = async ({ points, groupVariables, sdk }) => {
     }; 
 
     if (runTandRLoop) {
-      logEvent("running tandr");
+      sdk.logEvent("running tandr");
       // trim
       if (R <= I) {
         
-        logEvent("trimming");
+        sdk.logEvent("trimming");
         const currentSetpoint = SATSetpoint?.latestValue?.value || 0;
         const tMax = limit(currentSetpoint + SPtrim, SPmin, SPmax);
         await groupVariables.byLabel("tMax")?.write(tMax);
-        logEvent(`Tmax: ${tMax}, Test: ${currentSetpoint + SPtrim}`);
+        sdk.logEvent(`Tmax: ${tMax}, Test: ${currentSetpoint + SPtrim}`);
         const newSetpoint = getProportionalSetpoint(tMax);
         await SATSetpoint.write({ real: newSetpoint });
         console(`Trimming to ${newSetpoint}`);
@@ -120,16 +115,16 @@ module.exports = async ({ points, groupVariables, sdk }) => {
       }
       // respond
       else {
-        logEvent("responding");
+        sdk.logEvent("responding");
         const respondAmount = Math.max(SPres * (R - I), SPResMax);
         const currentSetpoint = SATSetpoint?.latestValue?.value || 0;
-        logEvent("respond amount: " + respondAmount)
-        logEvent("setpoint: " + currentSetpoint)
+        sdk.logEvent("respond amount: " + respondAmount)
+        sdk.logEvent("setpoint: " + currentSetpoint)
         const tMax = limit(currentSetpoint + respondAmount, SPmin, SPmax);
         await groupVariables.byLabel("tMax")?.write(tMax);
         const newSetpoint = getProportionalSetpoint(tMax);
         await SATSetpoint.write({ real: newSetpoint });
-        logEvent(`Responding to ${newSetpoint}`);
+        sdk.logEvent(`Responding to ${newSetpoint}`);
         return { result: "success", message: `Responding to ${newSetpoint}` };
       }
     }

@@ -80,6 +80,10 @@ This hook implements Trim and Repond logic based on the total number of requests
 
 Users should be able to use this app without many changes to the logic. However, there are certain areas that will need to be customized to meet the needs of your installation.
 
+**Importance Multiplier**
+
+Requests will automatically be adjusted based on an important multiplier, which can be configured by zone. By default this is specified as an attribute called `importanceMultiplier` on the Vav. If a zone should be ignored, set this attribute to 0. If no importance multiplier is specified, it will default to 1.
+
 **Point Selection**
 
 Depending on your data, you may need to change the points that are selected for each hook. This can be done in the Hook user interface:
