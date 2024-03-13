@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="index.js" type="text/javascript"></script>
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.46/dist/apexcharts.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/ag-grid-community/dist/ag-grid-community.min.js"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
     <link
@@ -53,7 +53,7 @@
 
       var applicationId = params.applicationId;
       var apiUrl = window.location.origin;
-      var sdk = new nf(apiUrl);
+      var sdk = new nf('http://8.15.101.124:8080');
     </script>
   </head>
 
