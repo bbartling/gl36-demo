@@ -43,12 +43,16 @@ module.exports = async ({ points, sdk, groupVariables }) => {
         sdk.groupKey
       } ${!!ZoneTemperature} ${!!ZoneTemperatureSetpoint} ${!!CoolingLoop}`
     );
-    return {
-      result: "error",
-      message: `Missing required points. Group: ${
-        sdk.groupKey
-      } ${!!ZoneTemperature} ${!!ZoneTemperatureSetpoint} ${!!CoolingLoop}`,
-    };
+    if(!CoolingLoop) {
+      return {result: "success", message: "Ignoring equip without Cooling Loop."}
+    } else {
+      return {
+        result: "error",
+        message: `Missing required points. Group: ${
+          sdk.groupKey
+        } ${!!ZoneTemperature} ${!!ZoneTemperatureSetpoint} ${!!CoolingLoop}`,
+      };
+    }
   }
 
   console.log(CoolingLoop.changeTime, CoolingLoop.latestValue.ts);

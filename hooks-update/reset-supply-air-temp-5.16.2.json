@@ -18,8 +18,8 @@
           "uuid": "",
           "label": "Total SAT Requests",
           "attrs": {
-            "airRef": "{{ Point.Attrs.airRef }}",
-            "equipRef": "{{ Point.Attrs.airRef }}"
+            "airRef": "{{ point.attrs.airRef }}",
+            "equipRef": "{{ point.attrs.airRef }}"
           }
         }
       ]

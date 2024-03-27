@@ -2,23 +2,29 @@ const NormalSdk = require("@normalframework/applications-sdk");
 const { interpolate, limit } = require("../helpers");
 
 
-/** 
+/**
  * Invoke hook function
  * @param {NormalSdk.InvokeParams} params
  * @returns {NormalSdk.InvokeResult}
  */
 module.exports = async ({ points, groupVariables, sdk }) => {
+
+
+  if (sdk.groupKey === "") {
+    sdk.logEvent(JSON.stringify(points.map(({ attrs, uuid }) => ({ attrs, uuid })), null, 2))
+    return { 'result': 'success', message: "Dropping empty group." }
+  }
   try {
     const minClgSAT = 55;
-    const maxClgSAT = groupVariables.byLabel("maxClgSAT")?.latestValue.value ?? 70;
+    const maxClgSAT = groupVariables.byLabel("maxClgSAT")?.latestValue?.value ?? 70;
     const OATMin = 60;
     const OATMax = 70;
 
     const totalRequests = points
       .where((p) => p.attrs.label === "Total SAT Requests")
       .first();
-    
-      const R = totalRequests.latestValue.value;
+
+    const R = totalRequests.latestValue.value;
 
     sdk.logEvent(sdk.groupKey, totalRequests.latestValue.value);
 
@@ -96,7 +102,7 @@ module.exports = async ({ points, groupVariables, sdk }) => {
         ],
         { min: minClgSAT, max: maxClgSAT }
       );
-    }; 
+    };
 
     if (runTandRLoop) {
       sdk.logEvent("running tandr");

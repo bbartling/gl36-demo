@@ -54,7 +54,7 @@
           "uuid": "",
           "label": "Cooling_SAT_Requests",
           "attrs": {
-            "airRef": "{{ Point.Attrs.airRef }}",
+            "airRef": "{{ point.attrs.airRef }}",
             "description": "Cooling SAT Requests"
           }
         },
@@ -62,7 +62,7 @@
           "uuid": "",
           "label": "SuppressedUntilTime",
           "attrs": {
-            "airRef": "{{ Point.Attrs.airRef }}",
+            "airRef": "{{ point.attrs.airRef }}",
             "description": "Time Based Suppression for Cooling Setpoint"
           }
         },
@@ -70,7 +70,7 @@
           "uuid": "",
           "label": "CoolingLoopBackOff",
           "attrs": {
-            "airRef": "{{ Point.Attrs.airRef }}"
+            "airRef": "{{ point.attrs.airRef }}"
           }
         }
       ]

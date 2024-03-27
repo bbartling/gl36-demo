@@ -7,6 +7,9 @@ const { limit } = require("../helpers");
  * @returns {NormalSdk.InvokeResult}
  */
 module.exports = async ({ points, sdk, groupVariables }) => {
+  if(sdk.groupKey === "") {
+    return {result: "success", message: "Ignoring empty group"}
+  }
 
   sdk.logEvent("Starting sp-trim-and-respond");
 

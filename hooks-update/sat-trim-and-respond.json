@@ -29,28 +29,28 @@
           "uuid": "",
           "label": "SAT_Setpoint",
           "attrs": {
-            "equipRef": "{{ Point.Attrs.airRef }}"
+            "equipRef": "{{ point.attrs.airRef }}"
           }
         },
         {
           "uuid": "",
           "label": "tMax",
           "attrs": {
-            "equipRef": "{{ Point.Attrs.airRef }}"
+            "equipRef": "{{ point.attrs.airRef }}"
           }
         },
         {
           "uuid": "",
           "label": "IgnoredRequests",
           "attrs": {
-            "equipRef": "{{ Point.Attrs.airRef }}"
+            "equipRef": "{{ point.attrs.airRef }}"
           }
         },
         {
           "uuid": "",
           "label": "maxClgSAT",
           "attrs": {
-            "equipRef": "{{ Point.Attrs.airRef }}"
+            "equipRef": "{{ point.attrs.airRef }}"
           }
         }
       ]

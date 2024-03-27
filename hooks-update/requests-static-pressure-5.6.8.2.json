@@ -54,9 +54,9 @@
           "uuid": "",
           "label": "inDamperLoop",
           "attrs": {
-            "airRef": "{{ Point.Attrs.airRef }}",
+            "airRef": "{{ point.attrs.airRef }}",
             "description": "Damper Loop Status",
-            "equipRef": "{{ Point.Attrs.equipRef }}",
+            "equipRef": "{{ point.attrs.equipRef }}",
             "label": "inDamperLoop"
           }
         },
@@ -64,8 +64,8 @@
           "uuid": "",
           "label": "Cooling_SP_Requests",
           "attrs": {
-            "airRef": "{{ Point.Attrs.airRef }}",
-            "equipRef": "{{ Point.Attrs.equipRef }}",
+            "airRef": "{{ point.attrs.airRef }}",
+            "equipRef": "{{ point.attrs.equipRef }}",
             "label": "Cooling_SP_Requests"
           }
         }
