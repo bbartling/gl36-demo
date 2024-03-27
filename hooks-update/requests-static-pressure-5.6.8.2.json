@@ -72,7 +72,6 @@
       ]
     },
     "schedule": {
-      "cron": "",
       "rrule": "RRULE:FREQ=MINUTELY;INTERVAL=1"
     }
   }

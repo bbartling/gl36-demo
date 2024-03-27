@@ -29,13 +29,12 @@
           "uuid": "",
           "label": "SP_Setpoint",
           "attrs": {
-            "equipRef": "{{ Point.Attrs.airRef }}"
+            "equipRef": "{{ point.attrs.airRef }}"
           }
         }
       ]
     },
     "schedule": {
-      "cron": "",
       "rrule": "RRULE:FREQ=MINUTELY;INTERVAL=2"
     }
   }
