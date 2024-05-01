@@ -10,10 +10,18 @@ const { trimAndRespond } = NormalSdk;
  * @returns {NormalSdk.InvokeResult}
  */
 module.exports = async ({ points, sdk, groupVariables }) => {
+  
+  points.forEach(p => {
+    if(p.latestValue.value < 0) {
+      sdk.logEvent("Negative value")
+      sdk.logEvent(JSON.stringify({uuid: p.uuid, attrs: p.attrs}))
+    }
+  })
   const values = points.map((x) => x.latestValue.value ?? 0);
-  console.log(values);
+  sdk.logEvent(sdk.groupKey)
+  sdk.logEvent(values.join(","));
   const requests = values.reduce((a, b) => a + b, 0);
-  console.log(sdk.groupKey, requests);
+  console.log(sdk.groupKey || "<empty>", requests);
 
   const RequestVariable = groupVariables.byLabel("Total SAT Requests");
   await RequestVariable.write(requests);

@@ -24,6 +24,11 @@ module.exports = async ({ points, groupVariables, sdk }) => {
       .where((p) => p.attrs.label === "Total SAT Requests")
       .first();
 
+    if(!totalRequests) {
+      sdk.logEvent(`Total Points`, points.length)
+      return {"result": 'error', message: `Total Requests Variable not found. Points: ${points.length} `}
+    }
+
     const R = totalRequests.latestValue.value;
 
     sdk.logEvent(sdk.groupKey, totalRequests.latestValue.value);
