@@ -28,7 +28,7 @@ export default {
 
     watchEffect(async () => {
       const all = await sdk.getHookPoints({
-        applicationId: "gl36-new",
+        applicationId: "gl36",
         hookId: "0d73974b-f348-4a83-a05e-da4de852e219",
         additionalQuery: {
           field: { property: "class", text: "" },

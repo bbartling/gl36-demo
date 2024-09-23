@@ -23,7 +23,7 @@ const limit = (value, min, max) => {
  */
 module.exports = async ({ points, sdk, groupVariables }) => {
   try {
-
+    sdk.logEvent(JSON.stringify(points.map(p => ({ uuid: p.uuid, name: p.name, attrs: p.attrs, val: p.latestValue.value })), null, 2))
     const CoolingBackOff = groupVariables.byLabel("CoolingLoopBackOff");
     const isInCoolingBackOffLoop = Boolean(CoolingBackOff.latestValue?.value);
 
@@ -39,7 +39,6 @@ module.exports = async ({ points, sdk, groupVariables }) => {
     const CoolingLoop = points.byLabel("cool-cmd").first();
 
     if (!ZoneTemperature || !ZoneTemperatureSetpoint || !CoolingLoop) {
-      sdk.logEvent(JSON.stringify(points.map(p => ({ uuid: p.uuid, name: p.name, attrs: p.attrs })), null, 2))
       sdk.logEvent(
         `Missing required points. Group: ${sdk.groupKey
         } ${!!ZoneTemperature} ${!!ZoneTemperatureSetpoint} ${!!CoolingLoop}`
