@@ -11,6 +11,38 @@ export default {
         {
           or: [
             {
+              and: [
+                {
+                  field: {
+                    property: "label",
+                    text: "Cooling_SP_Requests",
+                  },
+                },
+                {
+                  field: {
+                    property: "application_id",
+                    text: "gl36",
+                  },
+                }
+              ]
+            },
+            {
+              and: [
+                {
+                  field: {
+                    property: "label",
+                    text: "Cooling_SAT_Requests",
+                  },
+                },
+                {
+                  field: {
+                    property: "application_id",
+                    text: "gl36",
+                  },
+                }
+              ]
+            },
+            {
               field: {
                 property: "class",
                 text: "zone-air-temp-sensor",
@@ -74,30 +106,38 @@ export default {
         { field: "discharge-air-flow-sp", sortable: true },
         { field: "zone-air-temp-occ-cooling-sp", sortable: true },
         { field: "cool-cmd", sortable: true },
+        {field: "SP Requests", sortable: true},
+        {field: "SAT Requests", sortable: true}
       ];
 
       const rowData = [];
 
-      const selectValue = (points, className) => {
+      const selectByClass = (points, className) => {
         return points.find((v) => v.attrs.class === className)?.latestValue
           .valueType.double;
+      };
+
+      const selectByLabel = (points, label) => {
+        return points.find((v) => v.attrs.label === label)?.latestValue?.valueType?.double;
       };
 
       grouped.forEach((values, group) => {
         rowData.push({
           vav: group,
-          "damper-sensor": selectValue(values, "damper-sensor"),
-          "zone-air-temp-sensor": selectValue(values, "zone-air-temp-sensor"),
-          "discharge-air-flow-sp": selectValue(values, "discharge-air-flow-sp"),
-          "discharge-air-flow-sensor": selectValue(
+          "damper-sensor": selectByClass(values, "damper-sensor"),
+          "zone-air-temp-sensor": selectByClass(values, "zone-air-temp-sensor"),
+          "discharge-air-flow-sp": selectByClass(values, "discharge-air-flow-sp"),
+          "discharge-air-flow-sensor": selectByClass(
             values,
             "discharge-air-flow-sensor"
           ),
-          "zone-air-temp-occ-cooling-sp": selectValue(
+          "zone-air-temp-occ-cooling-sp": selectByClass(
             values,
             "zone-air-temp-occ-cooling-sp"
           ),
-          "cool-cmd": selectValue(values, "cool-cmd"),
+          "cool-cmd": selectByClass(values, "cool-cmd"),
+          "SP Requests": selectByLabel(values, "Cooling_SP_Requests"),
+          "SAT Requests": selectByLabel(values, "Cooling_SAT_Requests")
         });
       });
 

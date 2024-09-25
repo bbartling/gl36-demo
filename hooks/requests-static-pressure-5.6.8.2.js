@@ -12,11 +12,14 @@ const getPercentage = (numerator, denominator) => {
  * @returns {NormalSdk.InvokeResult}
  */
 module.exports = async ({ groupVariables, points, sdk }) => {
+  sdk.logEvent("airRefs", points.map(p => p.attrs.airRef).join(", "))
   try {
     const VavEquip = points.byLabel("vav").first(); // Current VAV
     const AirFlowSetpoint = points.byLabel("discharge-air-flow-sp").first(); // Desired Airflow
     const MeasuredAirflow = points.byLabel("discharge-air-flow-sensor").first(); // VAV Airflow
     const DamperPosition = points.byLabel("damper-sensor").first(); // Damper Position
+
+    sdk.logEvent("damper position attrs", JSON.stringify(DamperPosition.attrs))
     const DamperLoop = groupVariables.find(
       (v) => v.attrs.label === "inDamperLoop"
     );

@@ -61,7 +61,7 @@ module.exports = async ({ points, sdk, groupVariables }) => {
   const SPmax = bound.max;
   const Td = "10m";
   const T = "2m";
-  const I = 3;
+  const I = 6;
   const SPtrim = -0.02;
   const SPres = 0.04;
   const SPResMax = 0.08;

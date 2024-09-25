@@ -3,3 +3,6 @@
 node_modules
 # nf.config.json
 .DS_Store
+.npm
+combined.log
+error.log

@@ -76,7 +76,7 @@ export default {
 
     watchEffect(async () => {
       const all = await sdk.getHookPoints({
-        applicationId: "gl36-new",
+        applicationId: "gl36",
         hookId: "b4b4426e-c537-4466-9c1c-12095db99c28",
         additionalQuery: {
           field: { property: "class", text: "zone-air-temp-sensor" },

@@ -1,31 +1,33 @@
 {
-  "hook": {
-    "id": "95ef9895-5410-49d0-95e3-2aac9c0bc36f",
-    "name": "reset-supply-air-temp-5.16.2",
-    "entryPoint": "hooks/reset-supply-air-temp-5.16.2.js",
-    "points": {
-      "layer": "automation",
-      "labelAttribute": "attrs.class",
-      "query": {
-        "field": {
-          "property": "label",
-          "text": "Cooling_SAT_Requests"
-        }
-      },
-      "groups": { "keys": ["airRef"] },
-      "groupVariables": [
-        {
-          "uuid": "",
-          "label": "Total SAT Requests",
-          "attrs": {
-            "airRef": "{{ point.attrs.airRef }}",
-            "equipRef": "{{ point.attrs.airRef }}"
-          }
-        }
+  "id": "95ef9895-5410-49d0-95e3-2aac9c0bc36f",
+  "name": "reset-supply-air-temp-5.16.2",
+  "entryPoint": "/hooks/reset-supply-air-temp-5.16.2.js",
+  "points": {
+    "layer": "automation",
+    "query": {
+      "field": {
+        "property": "label",
+        "text": "Cooling_SAT_Requests"
+      }
+    },
+    "groups": {
+      "keys": [
+        "airRef"
       ]
     },
-    "schedule": {
-      "rrule": "RRULE:FREQ=MINUTELY;INTERVAL=1"
-    }
-  }
+    "groupVariables": [
+      {
+        "label": "Total SAT Requests",
+        "attrs": {
+          "airRef": "{{ point.attrs.airRef }}",
+          "equipRef": "{{ point.attrs.airRef }}"
+        }
+      }
+    ],
+    "labelAttribute": "attrs.class"
+  },
+  "schedule": {
+    "rrule": "RRULE:FREQ=MINUTELY;INTERVAL=1"
+  },
+  "mode": "MODE_SCHEDULED"
 }
